@@ -1,0 +1,23 @@
+{
+  "name": "vulx",
+  "version": "0.0.1",
+  "description": "Vulmix CLI",
+  "type": "module",
+  "bin": {
+    "vulx": "./bin/cli.mjs"
+  },
+  "repository": "ojvribeiro/vulmix",
+  "keywords": [
+    "vulmix",
+    "cli",
+    "vulx",
+    "vue",
+    "nuxt"
+  ],
+  "author": "Victor Ribeiro",
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^5.2.0",
+    "find-free-port": "^2.0.0"
+  }
+}
