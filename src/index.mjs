@@ -84,7 +84,7 @@ function runLaravelMix(mixCommand) {
       }${mixCommand === 'serve' ? ` && ${serveCommand}` : ''}`
 
       useConsole.clear()
-      useConsole.log(chalk.grey(`Vulx\n`))
+      useConsole.log(chalk.grey(`Vulxi 0.0.2\n`))
 
       execSync(command, {
         stdio: 'inherit',
