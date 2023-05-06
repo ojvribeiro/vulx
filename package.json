@@ -1,16 +1,16 @@
 {
-  "name": "vulx",
+  "name": "vulxi",
   "version": "0.0.1",
   "description": "Vulmix CLI",
   "type": "module",
   "bin": {
-    "vulx": "./bin/cli.mjs"
+    "vulxi": "./bin/cli.mjs"
   },
   "repository": "ojvribeiro/vulmix",
   "keywords": [
     "vulmix",
     "cli",
-    "vulx",
+    "vulxi",
     "vue",
     "nuxt"
   ],
