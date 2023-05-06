@@ -12,22 +12,25 @@ const normalizePath = originalPath => {
 }
 
 const isDevMode = !fs.existsSync(
-  path.resolve(__dirname, '../../../../vulmix.config.ts')
+  path.resolve(__dirname, '../../../vulmix.config.ts')
 )
 
 const absoluteVulmixPaths = () => {
   return {
     absoluteRootPath:
       isDevMode === true
-        ? normalizePath(path.resolve(__dirname, '../../demo'))
-        : normalizePath(path.resolve(__dirname, '../../../..')),
+        ? normalizePath(path.resolve(__dirname, '../../../demo'))
+        : normalizePath(path.resolve(__dirname, '../../..')),
 
-    absolutePackagePath: normalizePath(path.resolve(__dirname, '../..')),
+    absolutePackagePath:
+      isDevMode === true
+        ? normalizePath(path.resolve(__dirname, '../../..'))
+        : normalizePath(path.resolve(__dirname, '../../vulmix')),
 
     absolutePublicPath:
       isDevMode === true
-        ? normalizePath(path.resolve(__dirname, '../../demo/_dist'))
-        : normalizePath(path.resolve(__dirname, '../../../../_dist')),
+        ? normalizePath(path.resolve(__dirname, '../../../demo/_dist'))
+        : normalizePath(path.resolve(__dirname, '../../../_dist')),
   }
 }
 
