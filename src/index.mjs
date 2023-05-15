@@ -104,7 +104,7 @@ function copyMixFile() {
 
 function copyTypes() {
   fs.copyFileSync(
-    `${ABSOLUTE_PACKAGE_PATH}/utils/tsconfig.json`,
+    `${ABSOLUTE_PACKAGE_PATH}/utils/tsconfig${isDevMode ? '.dev' : ''}.json`,
     `${ABSOLUTE_ROOT_PATH}/.vulmix/types/tsconfig.json`
   )
 
