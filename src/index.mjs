@@ -2,9 +2,13 @@ import fs from 'node:fs'
 import { execSync } from 'node:child_process'
 import fp from 'find-free-port'
 import chalk from 'chalk'
+import { createRequire } from 'node:module'
 
 import { useConsole } from './useConsole.js'
 import { absoluteVulmixPaths, isDevMode } from './paths.js'
+
+const require = createRequire(import.meta.url)
+const pkg = require('../package.json')
 
 const ABSOLUTE_ROOT_PATH = absoluteVulmixPaths().absoluteRootPath
 const ABSOLUTE_PACKAGE_PATH = absoluteVulmixPaths().absolutePackagePath
@@ -84,7 +88,7 @@ function runLaravelMix(mixCommand) {
       }${mixCommand === 'serve' ? ` && ${serveCommand}` : ''}`
 
       useConsole.clear()
-      useConsole.log(chalk.grey(`Vulxi 0.0.2\n`))
+      useConsole.log(chalk.grey(`Vulxi ${pkg.version}\n`))
 
       execSync(command, {
         stdio: 'inherit',
