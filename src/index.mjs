@@ -16,6 +16,10 @@ const ABSOLUTE_PACKAGE_PATH = absoluteVulmixPaths().absolutePackagePath
 const CLI_OPTION = process.argv[2]
 
 function prepare() {
+  if (!fs.existsSync(`${ABSOLUTE_ROOT_PATH}/.vulmix`)) {
+    fs.mkdirSync(`${ABSOLUTE_ROOT_PATH}/.vulmix`)
+  }
+
   if (!fs.existsSync(`${ABSOLUTE_ROOT_PATH}/.vulmix/client`)) {
     fs.mkdirSync(`${ABSOLUTE_ROOT_PATH}/.vulmix/client`)
   }
