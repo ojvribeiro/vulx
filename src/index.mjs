@@ -52,11 +52,8 @@ function prepare() {
     copyUtils()
   }
 
-  execSync(
-    `tsc ${ABSOLUTE_ROOT_PATH}/vulmix.config.ts --outDir ${ABSOLUTE_ROOT_PATH}/.vulmix`,
-    {
-      stdio: 'inherit',
-    }
+  runCommand(
+    `tsc ${ABSOLUTE_ROOT_PATH}/vulmix.config.ts --outDir ${ABSOLUTE_ROOT_PATH}/.vulmix`
   )
 }
 
@@ -115,12 +112,22 @@ function runLaravelMix(mixCommand) {
       useConsole.clear()
       useConsole.log(chalk.grey(`Vulxi ${pkg.version}\n`))
 
-      execSync(command, {
-        stdio: 'inherit',
-      })
+      runCommand(command)
     } catch (err) {
       console.log(err)
     }
+  })
+}
+
+
+/**
+ * Run non-blocking CLI command
+ * @param {string} command - Command to run
+ * @returns {void}
+ */
+function runCommand(command) {
+  execSync(command, {
+    stdio: 'inherit',
   })
 }
 
