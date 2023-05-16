@@ -183,6 +183,6 @@ if (CLI_OPTION === 'prepare') {
   console.log(
     `${chalk.redBright('Invalid command')}${chalk.grey(
       '. You can use:'
-    )} vulx dev|prod|serve`
+    )} vulxi dev|prod|serve|upgrade|prepare|clean`
   )
 }
