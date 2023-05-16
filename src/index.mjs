@@ -119,6 +119,38 @@ function runLaravelMix(mixCommand) {
   })
 }
 
+/**
+ * Upgrade Vulmix to latest version
+ * @returns {void}
+ */
+function upgrade() {
+  const command = `yarpm upgrade vulmix@preview`
+
+  useConsole.clear()
+  useConsole.log(chalk.grey(`Vulxi ${pkg.version}\n`))
+  useConsole.log(chalk.grey(`Removing .vulmix folder...\n`))
+
+  useConsole.log(chalk.grey(`Upgrading Vulmix version to latest...\n`))
+
+  runCommand(command)
+}
+
+/**
+ * Remove `.vulmix` and `node_modules` folders
+ * @returns {void}
+ * @todo Add confirmation
+ */
+function clean() {
+  useConsole.clear()
+  useConsole.log(chalk.grey(`Vulxi ${pkg.version}\n`))
+  useConsole.log(chalk.grey(`Removing .vulmix and node_modules folders\n`))
+
+  fs.rmSync(`${ABSOLUTE_ROOT_PATH}/.vulmix`, { recursive: true })
+  fs.rmSync(
+    `${isDevMode ? ABSOLUTE_PACKAGE_PATH : ABSOLUTE_ROOT_PATH}/node_modules`,
+    { recursive: true }
+  )
+}
 
 /**
  * Run non-blocking CLI command
@@ -179,6 +211,10 @@ if (CLI_OPTION === 'prepare') {
   prod()
 } else if (CLI_OPTION === 'serve') {
   serve()
+} else if (CLI_OPTION === 'upgrade') {
+  upgrade()
+} else if (CLI_OPTION === 'clean') {
+  clean()
 } else {
   console.log(
     `${chalk.redBright('Invalid command')}${chalk.grey(
