@@ -15,6 +15,10 @@ const ABSOLUTE_PACKAGE_PATH = absoluteVulmixPaths().absolutePackagePath
 
 const CLI_OPTION = process.argv[2]
 
+/**
+ * Creates necessary folders and files
+ * @returns {void}
+ */
 function prepare() {
   if (!fs.existsSync(`${ABSOLUTE_ROOT_PATH}/.vulmix`)) {
     fs.mkdirSync(`${ABSOLUTE_ROOT_PATH}/.vulmix`)
@@ -56,22 +60,39 @@ function prepare() {
   )
 }
 
+/**
+ * Run dev build with HMR enabled
+ * @returns {void}
+ */
 function dev() {
   prepare()
 
   runLaravelMix('hot')
 }
 
+/**
+ * Build for production
+ * @returns {void}
+ */
 function prod() {
   prepare()
 
   runLaravelMix('prod')
 }
 
+/**
+ * Serve local production build
+ * @returns {void}
+ */
 function serve() {
   runLaravelMix('serve')
 }
 
+/**
+ * Run Laravel Mix
+ * @param {string} mixCommand - Mix command to run
+ * @returns {void}
+ */
 function runLaravelMix(mixCommand) {
   fp(3000, function (fpError, freePort) {
     if (fpError) {
@@ -103,6 +124,10 @@ function runLaravelMix(mixCommand) {
   })
 }
 
+/**
+ * Copy webpack.mix.js file to .vulmix/laravel-mix folder
+ * @returns {void}
+ */
 function copyMixFile() {
   fs.copyFileSync(
     `${ABSOLUTE_PACKAGE_PATH}/utils/webpack.mix${isDevMode ? '.dev' : ''}.js`,
@@ -110,6 +135,10 @@ function copyMixFile() {
   )
 }
 
+/**
+ * Copy tsconfig.json and vue-shims.d.ts files to .vulmix/types folder
+ * @returns {void}
+ */
 function copyTypes() {
   fs.copyFileSync(
     `${ABSOLUTE_PACKAGE_PATH}/utils/tsconfig${isDevMode ? '.dev' : ''}.json`,
@@ -122,6 +151,10 @@ function copyTypes() {
   )
 }
 
+/**
+ * Copy defineVulmixConfig.ts file to .vulmix/utils folder
+ * @returns {void}
+ */
 function copyUtils() {
   fs.copyFileSync(
     `${ABSOLUTE_PACKAGE_PATH}/utils/defineVulmixConfig${
