@@ -100,7 +100,7 @@ function runLaravelMix(mixCommand) {
 
     try {
       const port = freePort
-      const serveCommand = `npx http-server -p ${port} -a localhost ${ABSOLUTE_ROOT_PATH}/_dist --gzip --proxy http://localhost:${port}?`
+      const serveCommand = `yarpm run http-server -p ${port} -a localhost ${ABSOLUTE_ROOT_PATH}/_dist --gzip --proxy http://localhost:${port}?`
       const command = `mix${
         mixCommand === 'hot' ? ' watch' : ''
       } --mix-config=${ABSOLUTE_ROOT_PATH}/.vulmix/laravel-mix/webpack.mix.js${
