@@ -14,6 +14,7 @@ const ABSOLUTE_ROOT_PATH = absoluteVulmixPaths().absoluteRootPath
 const ABSOLUTE_PACKAGE_PATH = absoluteVulmixPaths().absolutePackagePath
 
 const CLI_OPTION = process.argv[2]
+const CLI_FLAG = process.argv[3]
 
 /**
  * Creates necessary folders and files
@@ -145,11 +146,19 @@ function clean() {
   useConsole.log(chalk.grey(`Vulxi ${pkg.version}\n`))
   useConsole.log(chalk.grey(`Removing .vulmix and node_modules folders\n`))
 
-  fs.rmSync(`${ABSOLUTE_ROOT_PATH}/.vulmix`, { recursive: true })
-  fs.rmSync(
-    `${isDevMode ? ABSOLUTE_PACKAGE_PATH : ABSOLUTE_ROOT_PATH}/node_modules`,
-    { recursive: true }
-  )
+  if (fs.existsSync(`${ABSOLUTE_ROOT_PATH}/.vulmix`)) {
+    fs.rmSync(`${ABSOLUTE_ROOT_PATH}/.vulmix`, {
+      recursive: true,
+      force: CLI_FLAG === '--force',
+    })
+  }
+
+  if (fs.existsSync(`${ABSOLUTE_ROOT_PATH}/node_modules`)) {
+    fs.rmSync(
+      `${isDevMode ? ABSOLUTE_PACKAGE_PATH : ABSOLUTE_ROOT_PATH}/node_modules`,
+      { recursive: true, force: CLI_FLAG === '--force' }
+    )
+  }
 }
 
 /**
