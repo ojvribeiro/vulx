@@ -210,6 +210,12 @@ function copyUtils() {
     }.ts`,
     `${ABSOLUTE_ROOT_PATH}/.vulmix/utils/defineVulmixConfig.ts`
   )
+
+  fs.cpSync(
+    `${ABSOLUTE_PACKAGE_PATH}/src/vue/components/runtime`,
+    `${ABSOLUTE_ROOT_PATH}/.vulmix/runtime/components`,
+    { recursive: true }
+  )
 }
 
 if (CLI_OPTION === 'prepare') {
