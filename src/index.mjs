@@ -1,6 +1,6 @@
 import fs from 'node:fs'
 import { execSync } from 'node:child_process'
-import { getPort } from 'get-port-please'
+import fp from 'find-free-port'
 import chalk from 'chalk'
 import { createRequire } from 'node:module'
 
@@ -91,26 +91,33 @@ function serve() {
  * @param {string} mixCommand - Mix command to run
  * @returns {void}
  */
-async function runLaravelMix(mixCommand) {
-  const port = await getPort()
+function runLaravelMix(mixCommand) {
+  fp(3000, function (fpError, freePort) {
+    if (fpError) {
+      console.log(fpError)
 
-  try {
-    const serveCommand = `yarpm run http-server -p ${port} -a localhost ${ABSOLUTE_ROOT_PATH}/_dist --gzip --proxy http://localhost:${port}?`
-    const command = `mix${
-      mixCommand === 'hot' ? ' watch' : ''
-    } --mix-config=${ABSOLUTE_ROOT_PATH}/.vulmix/laravel-mix/webpack.mix.js${
-      mixCommand === 'hot' ? ` --hot -- --port=${port}` : ''
-    }${
-      mixCommand === 'prod' || mixCommand === 'serve' ? ' --production' : ''
-    }${mixCommand === 'serve' ? ` && ${serveCommand}` : ''}`
+      return
+    }
 
-    useConsole.clear()
-    useConsole.log(chalk.grey(`Vulxi ${pkg.version}\n`))
+    try {
+      const port = freePort
+      const serveCommand = `yarpm run http-server -p ${port} -a localhost ${ABSOLUTE_ROOT_PATH}/_dist --gzip --proxy http://localhost:${port}?`
+      const command = `mix${
+        mixCommand === 'hot' ? ' watch' : ''
+      } --mix-config=${ABSOLUTE_ROOT_PATH}/.vulmix/laravel-mix/webpack.mix.js${
+        mixCommand === 'hot' ? ` --hot -- --port=${port}` : ''
+      }${
+        mixCommand === 'prod' || mixCommand === 'serve' ? ' --production' : ''
+      }${mixCommand === 'serve' ? ` && ${serveCommand}` : ''}`
 
-    runCommand(command)
-  } catch (err) {
-    console.log(err)
-  }
+      useConsole.clear()
+      useConsole.log(chalk.grey(`Vulxi ${pkg.version}\n`))
+
+      runCommand(command)
+    } catch (err) {
+      console.log(err)
+    }
+  })
 }
 
 /**
@@ -230,5 +237,3 @@ if (CLI_OPTION === 'prepare') {
     )} vulxi dev|prod|serve|upgrade|prepare|clean`
   )
 }
-
-
