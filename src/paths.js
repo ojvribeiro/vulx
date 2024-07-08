@@ -1,4 +1,3 @@
-import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { getRelativePath } from './getRelativePath.js'
@@ -12,9 +11,6 @@ const normalizePath = originalPath => {
 }
 
 const vulxiRoot = normalizePath(path.resolve(__dirname, '..'))
-const isDevMode = !fs.existsSync(
-  path.resolve(__dirname, '../../../vulmix.config.ts')
-)
 
 /**
  * Returns absolute paths
@@ -25,20 +21,11 @@ const isDevMode = !fs.existsSync(
  */
 const absoluteVulmixPaths = () => {
   return {
-    absoluteRootPath:
-      isDevMode === true
-        ? normalizePath(path.resolve(vulxiRoot, `../../demo`))
-        : normalizePath(path.resolve(vulxiRoot, `../..`)),
+    absoluteRootPath: normalizePath(path.resolve(vulxiRoot, `../..`)),
 
-    absolutePackagePath:
-      isDevMode === true
-        ? normalizePath(path.resolve(vulxiRoot, `../..`))
-        : normalizePath(path.resolve(vulxiRoot, `../vulmix`)),
+    absolutePackagePath: normalizePath(path.resolve(vulxiRoot, `../vulmix`)),
 
-    absolutePublicPath:
-      isDevMode === true
-        ? normalizePath(path.resolve(vulxiRoot, `../../demo/_dist`))
-        : normalizePath(path.resolve(vulxiRoot, `../../_dist`)),
+    absolutePublicPath: normalizePath(path.resolve(vulxiRoot, `../../_dist`)),
   }
 }
 
@@ -49,22 +36,21 @@ const absoluteVulmixPaths = () => {
  * @returns {string} relativePublicPath - relative path to the `_dist` folder
  */
 const relativeVulmixPaths = () => {
-  const ABSOLUTE_ROOT_PATH = absoluteVulmixPaths(isDevMode).absoluteRootPath
-  const ABSOLUTE_PACKAGE_PATH =
-    absoluteVulmixPaths(isDevMode).absolutePackagePath
-  const ABSOLUTE_PUBLIC_PATH = absoluteVulmixPaths(isDevMode).absolutePublicPath
+  const ABSOLUTE_ROOT_PATH = absoluteVulmixPaths().absoluteRootPath
+  const ABSOLUTE_PACKAGE_PATH = absoluteVulmixPaths().absolutePackagePath
+  const ABSOLUTE_PUBLIC_PATH = absoluteVulmixPaths().absolutePublicPath
 
   return {
-    relativePackagePath:
-      isDevMode === true
-        ? getRelativePath(ABSOLUTE_PACKAGE_PATH, ABSOLUTE_PACKAGE_PATH)
-        : getRelativePath(ABSOLUTE_ROOT_PATH, ABSOLUTE_PACKAGE_PATH),
+    relativePackagePath: getRelativePath(
+      ABSOLUTE_ROOT_PATH,
+      ABSOLUTE_PACKAGE_PATH
+    ),
 
-    relativePublicPath:
-      isDevMode === true
-        ? getRelativePath(ABSOLUTE_PACKAGE_PATH, ABSOLUTE_PUBLIC_PATH)
-        : getRelativePath(ABSOLUTE_ROOT_PATH, ABSOLUTE_PUBLIC_PATH),
+    relativePublicPath: getRelativePath(
+      ABSOLUTE_ROOT_PATH,
+      ABSOLUTE_PUBLIC_PATH
+    ),
   }
 }
 
-export { absoluteVulmixPaths, relativeVulmixPaths, isDevMode }
+export { absoluteVulmixPaths, relativeVulmixPaths }

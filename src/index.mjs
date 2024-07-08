@@ -5,7 +5,7 @@ import chalk from 'chalk'
 import { createRequire } from 'node:module'
 
 import { useConsole } from './useConsole.js'
-import { absoluteVulmixPaths, isDevMode } from './paths.js'
+import { absoluteVulmixPaths } from './paths.js'
 
 const require = createRequire(import.meta.url)
 const pkg = require('../package.json')
@@ -161,10 +161,10 @@ function clean() {
   }
 
   if (fs.existsSync(`${ABSOLUTE_ROOT_PATH}/node_modules`)) {
-    fs.rmSync(
-      `${isDevMode ? ABSOLUTE_PACKAGE_PATH : ABSOLUTE_ROOT_PATH}/node_modules`,
-      { recursive: true, force: CLI_FLAG === '--force' }
-    )
+    fs.rmSync(`${ABSOLUTE_ROOT_PATH}/node_modules`, {
+      recursive: true,
+      force: CLI_FLAG === '--force',
+    })
   }
 }
 
@@ -185,7 +185,7 @@ function runCommand(command) {
  */
 function copyMixFile() {
   fs.copyFileSync(
-    `${ABSOLUTE_PACKAGE_PATH}/utils/webpack.mix${isDevMode ? '.dev' : ''}.js`,
+    `${ABSOLUTE_PACKAGE_PATH}/utils/webpack.mix.js`,
     `${ABSOLUTE_ROOT_PATH}/.vulmix/laravel-mix/webpack.mix.js`
   )
 }
@@ -196,7 +196,7 @@ function copyMixFile() {
  */
 function copyTypes() {
   fs.copyFileSync(
-    `${ABSOLUTE_PACKAGE_PATH}/utils/tsconfig${isDevMode ? '.dev' : ''}.json`,
+    `${ABSOLUTE_PACKAGE_PATH}/utils/tsconfig.json`,
     `${ABSOLUTE_ROOT_PATH}/.vulmix/types/tsconfig.json`
   )
 
@@ -212,9 +212,7 @@ function copyTypes() {
  */
 function copyUtils() {
   fs.copyFileSync(
-    `${ABSOLUTE_PACKAGE_PATH}/utils/defineVulmixConfig${
-      isDevMode ? '.dev' : ''
-    }.ts`,
+    `${ABSOLUTE_PACKAGE_PATH}/utils/defineVulmixConfig.ts`,
     `${ABSOLUTE_ROOT_PATH}/.vulmix/utils/defineVulmixConfig.ts`
   )
 
