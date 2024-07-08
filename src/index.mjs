@@ -21,6 +21,15 @@ const CLI_FLAG = process.argv[3]
  * @returns {void}
  */
 function prepare() {
+  const options = [
+    ['--outDir', `${ABSOLUTE_ROOT_PATH}/.vulmix`],
+    ['--moduleResolution', 'node'],
+    ['--skipLibCheck', 'true'],
+  ]
+
+  const optionsMap = options.map(([key, value]) => `${key} ${value}`).join(' ')
+  const command = `tsc ${ABSOLUTE_ROOT_PATH}/vulmix.config.ts ${optionsMap}`
+
   if (!fs.existsSync(`${ABSOLUTE_ROOT_PATH}/.vulmix`)) {
     fs.mkdirSync(`${ABSOLUTE_ROOT_PATH}/.vulmix`)
   }
@@ -53,9 +62,7 @@ function prepare() {
     copyUtils()
   }
 
-  runCommand(
-    `tsc ${ABSOLUTE_ROOT_PATH}/vulmix.config.ts --outDir ${ABSOLUTE_ROOT_PATH}/.vulmix`
-  )
+  runCommand(command)
 }
 
 /**
