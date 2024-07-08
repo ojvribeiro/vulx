@@ -204,6 +204,11 @@ function copyTypes() {
     `${ABSOLUTE_PACKAGE_PATH}/types/vue-shims.d.ts`,
     `${ABSOLUTE_ROOT_PATH}/.vulmix/types/vue-shims.d.ts`
   )
+
+  fs.copyFileSync(
+    `${ABSOLUTE_PACKAGE_PATH}/types/env.d.ts`,
+    `${ABSOLUTE_ROOT_PATH}/.vulmix/types/env.d.ts`
+  )
 }
 
 /**
