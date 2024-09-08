@@ -128,22 +128,6 @@ function runLaravelMix(mixCommand) {
 }
 
 /**
- * Upgrade Vulmix to latest version
- * @returns {void}
- */
-function upgrade() {
-  const command = `yarpm upgrade vulmix@preview`
-
-  useConsole.clear()
-  useConsole.log(chalk.grey(`Vulxi ${pkg.version}\n`))
-  useConsole.log(chalk.grey(`Removing .vulmix folder...\n`))
-
-  useConsole.log(chalk.grey(`Upgrading Vulmix version to latest...\n`))
-
-  runCommand(command)
-}
-
-/**
  * Remove `.vulmix` and `node_modules` folders
  * @returns {void}
  * @todo Add confirmation
@@ -204,11 +188,6 @@ function copyTypes() {
     `${ABSOLUTE_PACKAGE_PATH}/types/vue-shims.d.ts`,
     `${ABSOLUTE_ROOT_PATH}/.vulmix/types/vue-shims.d.ts`
   )
-
-  fs.copyFileSync(
-    `${ABSOLUTE_PACKAGE_PATH}/types/env.d.ts`,
-    `${ABSOLUTE_ROOT_PATH}/.vulmix/types/env.d.ts`
-  )
 }
 
 /**
@@ -236,14 +215,12 @@ if (CLI_OPTION === 'prepare') {
   prod()
 } else if (CLI_OPTION === 'serve') {
   serve()
-} else if (CLI_OPTION === 'upgrade') {
-  upgrade()
 } else if (CLI_OPTION === 'clean') {
   clean()
 } else {
   console.log(
     `${chalk.redBright('Invalid command')}${chalk.grey(
       '. You can use:'
-    )} vulxi dev|prod|serve|upgrade|prepare|clean`
+    )} vulxi dev|prod|serve|prepare|clean`
   )
 }
