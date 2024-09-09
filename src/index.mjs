@@ -14,11 +14,6 @@ const pkg = require('../package.json')
 const ABSOLUTE_ROOT_PATH = absoluteVulmixPaths().absoluteRootPath
 const ABSOLUTE_PACKAGE_PATH = absoluteVulmixPaths().absolutePackagePath
 
-const VULMIX_CONFIG_PATH = `${ABSOLUTE_ROOT_PATH}/.vulmix/vulmix.config.js`
-const VulmixConfig = require(VULMIX_CONFIG_PATH).default
-
-const SRC_PATH = VulmixConfig?.dirs?.src || '.'
-
 const CLI_OPTION = process.argv[2]
 const CLI_FLAG = process.argv[3]
 
@@ -52,14 +47,6 @@ function prepare() {
     copyMixFile()
   }
 
-  if (!fs.existsSync(`${ABSOLUTE_ROOT_PATH}/.vulmix/types`)) {
-    fs.mkdirSync(`${ABSOLUTE_ROOT_PATH}/.vulmix/types`)
-
-    copyTypes()
-  } else {
-    copyTypes()
-  }
-
   if (!fs.existsSync(`${ABSOLUTE_ROOT_PATH}/.vulmix/utils`)) {
     fs.mkdirSync(`${ABSOLUTE_ROOT_PATH}/.vulmix/utils`)
 
@@ -69,6 +56,14 @@ function prepare() {
   }
 
   runCommand(command)
+
+  if (!fs.existsSync(`${ABSOLUTE_ROOT_PATH}/.vulmix/types`)) {
+    fs.mkdirSync(`${ABSOLUTE_ROOT_PATH}/.vulmix/types`)
+
+    copyTypes()
+  } else {
+    copyTypes()
+  }
 }
 
 /**
@@ -185,6 +180,11 @@ function copyMixFile() {
  * @returns {void}
  */
 async function copyTypes() {
+  const VULMIX_CONFIG_PATH = `${ABSOLUTE_ROOT_PATH}/.vulmix/vulmix.config.js`
+  const VulmixConfig = require(VULMIX_CONFIG_PATH).default
+
+  const SRC_PATH = VulmixConfig?.dirs?.src || '.'
+
   const tsconfig = await readTSConfig(
     `${ABSOLUTE_ROOT_PATH}/.vulmix/types/tsconfig.json`
   )
