@@ -185,10 +185,6 @@ async function copyTypes() {
 
   const SRC_PATH = VulmixConfig?.dirs?.src || '.'
 
-  const tsconfig = await readTSConfig(
-    `${ABSOLUTE_ROOT_PATH}/.vulmix/types/tsconfig.json`
-  )
-
   fs.copyFileSync(
     `${ABSOLUTE_PACKAGE_PATH}/utils/tsconfig.json`,
     `${ABSOLUTE_ROOT_PATH}/.vulmix/types/tsconfig.json`
@@ -197,6 +193,10 @@ async function copyTypes() {
   fs.copyFileSync(
     `${ABSOLUTE_PACKAGE_PATH}/types/vue-shims.d.ts`,
     `${ABSOLUTE_ROOT_PATH}/.vulmix/types/vue-shims.d.ts`
+  )
+
+  const tsconfig = await readTSConfig(
+    `${ABSOLUTE_ROOT_PATH}/.vulmix/types/tsconfig.json`
   )
 
   // Update tsconfig.json object
