@@ -1,6 +1,9 @@
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { createRequire } from 'node:module'
 import { getRelativePath } from './getRelativePath.js'
+
+const require = createRequire(import.meta.url)
 
 const __filename = fileURLToPath(import.meta.url)
 
@@ -20,12 +23,28 @@ const vulxiRoot = normalizePath(path.resolve(__dirname, '..'))
  * @returns {string} absolutePublicPath - absolute path to the `_dist` folder
  */
 const absoluteVulmixPaths = () => {
+  const absoluteRootPath = normalizePath(path.resolve(vulxiRoot, `../..`))
+  const VULMIX_CONFIG_PATH = `${absoluteRootPath}/.vulmix/vulmix.config.js`
+  const VulmixConfig = require(VULMIX_CONFIG_PATH).default
+
+  const absolutePackagePath = normalizePath(
+    path.resolve(vulxiRoot, `../vulmix`)
+  )
+  const absolutePublicPath = normalizePath(
+    path.resolve(vulxiRoot, `${absoluteRootPath}/_dist`)
+  )
+  const absoluteSrcPath = normalizePath(
+    path.resolve(
+      __dirname,
+      `${absoluteRootPath}/${VulmixConfig?.dirs?.src || ''}`
+    )
+  )
+
   return {
-    absoluteRootPath: normalizePath(path.resolve(vulxiRoot, `../..`)),
-
-    absolutePackagePath: normalizePath(path.resolve(vulxiRoot, `../vulmix`)),
-
-    absolutePublicPath: normalizePath(path.resolve(vulxiRoot, `../../_dist`)),
+    absoluteRootPath,
+    absolutePackagePath,
+    absolutePublicPath,
+    absoluteSrcPath,
   }
 }
 

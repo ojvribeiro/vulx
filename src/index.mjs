@@ -3,6 +3,7 @@ import { execSync } from 'node:child_process'
 import fp from 'find-free-port'
 import chalk from 'chalk'
 import { createRequire } from 'node:module'
+import { readTSConfig, writeTSConfig } from 'pkg-types'
 
 import { useConsole } from './useConsole.js'
 import { absoluteVulmixPaths } from './paths.js'
@@ -12,6 +13,11 @@ const pkg = require('../package.json')
 
 const ABSOLUTE_ROOT_PATH = absoluteVulmixPaths().absoluteRootPath
 const ABSOLUTE_PACKAGE_PATH = absoluteVulmixPaths().absolutePackagePath
+
+const VULMIX_CONFIG_PATH = `${ABSOLUTE_ROOT_PATH}/.vulmix/vulmix.config.js`
+const VulmixConfig = require(VULMIX_CONFIG_PATH).default
+
+const SRC_PATH = VulmixConfig?.dirs?.src || '.'
 
 const CLI_OPTION = process.argv[2]
 const CLI_FLAG = process.argv[3]
@@ -128,22 +134,6 @@ function runLaravelMix(mixCommand) {
 }
 
 /**
- * Upgrade Vulmix to latest version
- * @returns {void}
- */
-function upgrade() {
-  const command = `yarpm upgrade vulmix@preview`
-
-  useConsole.clear()
-  useConsole.log(chalk.grey(`Vulxi ${pkg.version}\n`))
-  useConsole.log(chalk.grey(`Removing .vulmix folder...\n`))
-
-  useConsole.log(chalk.grey(`Upgrading Vulmix version to latest...\n`))
-
-  runCommand(command)
-}
-
-/**
  * Remove `.vulmix` and `node_modules` folders
  * @returns {void}
  * @todo Add confirmation
@@ -194,7 +184,11 @@ function copyMixFile() {
  * Copy tsconfig.json and vue-shims.d.ts files to .vulmix/types folder
  * @returns {void}
  */
-function copyTypes() {
+async function copyTypes() {
+  const tsconfig = await readTSConfig(
+    `${ABSOLUTE_ROOT_PATH}/.vulmix/types/tsconfig.json`
+  )
+
   fs.copyFileSync(
     `${ABSOLUTE_PACKAGE_PATH}/utils/tsconfig.json`,
     `${ABSOLUTE_ROOT_PATH}/.vulmix/types/tsconfig.json`
@@ -205,10 +199,18 @@ function copyTypes() {
     `${ABSOLUTE_ROOT_PATH}/.vulmix/types/vue-shims.d.ts`
   )
 
-  fs.copyFileSync(
-    `${ABSOLUTE_PACKAGE_PATH}/types/env.d.ts`,
-    `${ABSOLUTE_ROOT_PATH}/.vulmix/types/env.d.ts`
-  )
+  // Update tsconfig.json object
+  tsconfig.compilerOptions.paths = {
+    '~/*': [`./*`],
+    '@/*': [`${SRC_PATH}/*`],
+    '@assets/*': [`${SRC_PATH}/assets/*`],
+    '@components/*': [`${SRC_PATH}/components/*`],
+    '@composables/*': [`${SRC_PATH}/composables/*`],
+    '@layouts/*': [`${SRC_PATH}/layouts/*`],
+    '@pages/*': [`${SRC_PATH}/pages/*`],
+  }
+
+  writeTSConfig(`${ABSOLUTE_ROOT_PATH}/.vulmix/types/tsconfig.json`, tsconfig)
 }
 
 /**
@@ -236,14 +238,12 @@ if (CLI_OPTION === 'prepare') {
   prod()
 } else if (CLI_OPTION === 'serve') {
   serve()
-} else if (CLI_OPTION === 'upgrade') {
-  upgrade()
 } else if (CLI_OPTION === 'clean') {
   clean()
 } else {
   console.log(
     `${chalk.redBright('Invalid command')}${chalk.grey(
       '. You can use:'
-    )} vulxi dev|prod|serve|upgrade|prepare|clean`
+    )} vulxi dev|prod|serve|prepare|clean`
   )
 }
