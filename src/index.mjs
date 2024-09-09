@@ -200,7 +200,7 @@ async function copyTypes() {
   )
 
   // Update tsconfig.json object
-  tsconfig.compilerOptions?.paths = {
+  tsconfig.compilerOptions.paths = {
     '~/*': [`./*`],
     '@/*': [`${SRC_PATH}/*`],
     '@assets/*': [`${SRC_PATH}/assets/*`],
