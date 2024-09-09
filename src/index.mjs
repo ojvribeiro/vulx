@@ -3,6 +3,7 @@ import { execSync } from 'node:child_process'
 import fp from 'find-free-port'
 import chalk from 'chalk'
 import { createRequire } from 'node:module'
+import { readTSConfig, writeTSConfig } from 'pkg-types'
 
 import { useConsole } from './useConsole.js'
 import { absoluteVulmixPaths } from './paths.js'
@@ -12,6 +13,11 @@ const pkg = require('../package.json')
 
 const ABSOLUTE_ROOT_PATH = absoluteVulmixPaths().absoluteRootPath
 const ABSOLUTE_PACKAGE_PATH = absoluteVulmixPaths().absolutePackagePath
+
+const VULMIX_CONFIG_PATH = `${ABSOLUTE_ROOT_PATH}/.vulmix/vulmix.config.js`
+const VulmixConfig = require(VULMIX_CONFIG_PATH).default
+
+const SRC_PATH = VulmixConfig?.dirs?.src || '.'
 
 const CLI_OPTION = process.argv[2]
 const CLI_FLAG = process.argv[3]
@@ -178,7 +184,11 @@ function copyMixFile() {
  * Copy tsconfig.json and vue-shims.d.ts files to .vulmix/types folder
  * @returns {void}
  */
-function copyTypes() {
+async function copyTypes() {
+  const tsconfig = await readTSConfig(
+    `${ABSOLUTE_ROOT_PATH}/.vulmix/types/tsconfig.json`
+  )
+
   fs.copyFileSync(
     `${ABSOLUTE_PACKAGE_PATH}/utils/tsconfig.json`,
     `${ABSOLUTE_ROOT_PATH}/.vulmix/types/tsconfig.json`
@@ -188,6 +198,19 @@ function copyTypes() {
     `${ABSOLUTE_PACKAGE_PATH}/types/vue-shims.d.ts`,
     `${ABSOLUTE_ROOT_PATH}/.vulmix/types/vue-shims.d.ts`
   )
+
+  // Update tsconfig.json object
+  tsconfig.compilerOptions.paths = {
+    '~/*': [`./*`],
+    '@/*': [`${SRC_PATH}/*`],
+    '@assets/*': [`${SRC_PATH}/assets/*`],
+    '@components/*': [`${SRC_PATH}/components/*`],
+    '@composables/*': [`${SRC_PATH}/composables/*`],
+    '@layouts/*': [`${SRC_PATH}/layouts/*`],
+    '@pages/*': [`${SRC_PATH}/pages/*`],
+  }
+
+  writeTSConfig(`${ABSOLUTE_ROOT_PATH}/.vulmix/types/tsconfig.json`, tsconfig)
 }
 
 /**
