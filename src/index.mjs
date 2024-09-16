@@ -115,7 +115,7 @@ function runLaravelMix(mixCommand) {
       } --mix-config=${ABSOLUTE_ROOT_PATH}/.vulmix/laravel-mix/webpack.mix.js${
         mixCommand === 'hot' ? ` --hot -- --port=${port}` : ''
       }${
-        mixCommand === 'prod' || mixCommand === 'serve' ? ' --production' : ''
+        mixCommand === 'prod' ? ' --production' : ''
       }${mixCommand === 'serve' ? ` && ${serveCommand}` : ''}`
 
       useConsole.clear()
