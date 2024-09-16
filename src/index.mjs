@@ -234,7 +234,7 @@ if (CLI_OPTION === 'prepare') {
   prepare()
 } else if (CLI_OPTION === 'dev') {
   dev()
-} else if (CLI_OPTION === 'prod') {
+} else if (CLI_OPTION === 'prod' || CLI_OPTION === 'build') {
   prod()
 } else if (CLI_OPTION === 'serve') {
   serve()
@@ -244,6 +244,6 @@ if (CLI_OPTION === 'prepare') {
   console.log(
     `${chalk.redBright('Invalid command')}${chalk.grey(
       '. You can use:'
-    )} vulxi dev|prod|serve|prepare|clean`
+    )} vulxi dev|(prod|build)|serve|prepare|clean`
   )
 }
