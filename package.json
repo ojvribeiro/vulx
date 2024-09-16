@@ -1,6 +1,6 @@
 {
   "name": "vulxi",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Vulmix CLI",
   "type": "module",
   "bin": {

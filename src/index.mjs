@@ -109,14 +109,23 @@ function runLaravelMix(mixCommand) {
 
     try {
       const port = freePort
-      const serveCommand = `yarpm run http-server -p ${port} -a localhost ${ABSOLUTE_ROOT_PATH}/_dist --gzip --proxy http://localhost:${port}?`
+
+      if (mixCommand === 'serve') {
+        const serveCommand = `yarpm run http-server -p ${port} -a localhost ${ABSOLUTE_ROOT_PATH}/_dist --gzip --proxy http://localhost:${port}?`
+
+        useConsole.clear()
+        useConsole.log(chalk.grey(`Vulxi ${pkg.version}\n`))
+
+        runCommand(serveCommand)
+
+        return
+      }
+
       const command = `mix${
         mixCommand === 'hot' ? ' watch' : ''
       } --mix-config=${ABSOLUTE_ROOT_PATH}/.vulmix/laravel-mix/webpack.mix.js${
         mixCommand === 'hot' ? ` --hot -- --port=${port}` : ''
-      }${
-        mixCommand === 'prod' ? ' --production' : ''
-      }${mixCommand === 'serve' ? ` && ${serveCommand}` : ''}`
+      }${mixCommand === 'prod' ? ' --production' : ''}`
 
       useConsole.clear()
       useConsole.log(chalk.grey(`Vulxi ${pkg.version}\n`))
