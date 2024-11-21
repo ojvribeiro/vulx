@@ -17,12 +17,6 @@ const ABSOLUTE_PACKAGE_PATH = absoluteVulmixPaths().absolutePackagePath
 const CLI_OPTION = process.argv[2]
 const CLI_FLAG = process.argv[3]
 
-const appSubFolder =
-  VulmixConfig.dirs?.dist?.root &&
-  VulmixConfig.dirs?.dist?.root?.startsWith('/')
-    ? VulmixConfig.dirs?.dist?.root
-    : `/${VulmixConfig.dirs?.dist?.root}` || ''
-
 /**
  * Creates necessary folders and files
  * @returns {void}
@@ -197,6 +191,12 @@ function copyMixFile() {
 async function copyTypes() {
   const VULMIX_CONFIG_PATH = `${ABSOLUTE_ROOT_PATH}/.vulmix/vulmix.config.js`
   const VulmixConfig = require(VULMIX_CONFIG_PATH).default
+
+  const appSubFolder =
+    VulmixConfig.dirs?.dist?.root &&
+    VulmixConfig.dirs?.dist?.root?.startsWith('/')
+      ? VulmixConfig.dirs?.dist?.root
+      : `/${VulmixConfig.dirs?.dist?.root}` || ''
 
   const SRC_PATH = VulmixConfig?.dirs?.src || '.'
 
