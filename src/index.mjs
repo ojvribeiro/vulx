@@ -17,6 +17,12 @@ const ABSOLUTE_PACKAGE_PATH = absoluteVulmixPaths().absolutePackagePath
 const CLI_OPTION = process.argv[2]
 const CLI_FLAG = process.argv[3]
 
+const appSubFolder =
+  VulmixConfig.dirs?.dist?.root &&
+  VulmixConfig.dirs?.dist?.root?.startsWith('/')
+    ? VulmixConfig.dirs?.dist?.root
+    : `/${VulmixConfig.dirs?.dist?.root}` || ''
+
 /**
  * Creates necessary folders and files
  * @returns {void}
@@ -209,6 +215,8 @@ async function copyTypes() {
   )
 
   // Update tsconfig.json object
+  tsconfig.compilerOptions.outDir = `${ABSOLUTE_ROOT_PATH}/.vulmix/client${appSubFolder}`
+
   tsconfig.compilerOptions.paths = {
     '~/*': [`./*`],
     '@/*': [`${SRC_PATH}/*`],
