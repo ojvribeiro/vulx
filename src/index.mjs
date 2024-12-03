@@ -192,11 +192,11 @@ async function copyTypes() {
   const VULMIX_CONFIG_PATH = `${ABSOLUTE_ROOT_PATH}/.vulmix/vulmix.config.js`
   const VulmixConfig = require(VULMIX_CONFIG_PATH).default
 
-  const appSubFolder =
-    VulmixConfig.dirs?.dist?.root &&
-    VulmixConfig.dirs?.dist?.root?.startsWith('/')
-      ? VulmixConfig.dirs?.dist?.root
-      : `/${VulmixConfig.dirs?.dist?.root}` || ''
+  const appSubFolder = VulmixConfig?.dirs?.dist?.root
+    ? VulmixConfig.dirs.dist.root.startsWith('/')
+      ? VulmixConfig.dirs.dist.root
+      : `/${VulmixConfig.dirs.dist.root}`
+    : ''
 
   const SRC_PATH = VulmixConfig?.dirs?.src || '.'
 
