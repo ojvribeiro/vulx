@@ -218,13 +218,15 @@ async function copyTypes() {
   tsconfig.compilerOptions.outDir = `${ABSOLUTE_ROOT_PATH}/.vulmix/client${appSubFolder}`
 
   tsconfig.compilerOptions.paths = {
-    '~/*': [`./*`],
-    '@/*': [`${SRC_PATH}/*`],
-    '@assets/*': [`${SRC_PATH}/assets/*`],
-    '@components/*': [`${SRC_PATH}/components/*`],
-    '@composables/*': [`${SRC_PATH}/composables/*`],
-    '@layouts/*': [`${SRC_PATH}/layouts/*`],
-    '@pages/*': [`${SRC_PATH}/pages/*`],
+    '~': ['.'],
+    '~/*': ['./*'],
+    '@': [`${SRC_PATH || '.'}`],
+    '@/*': [`${SRC_PATH || '.'}/*`],
+    '@assets/*': [`${SRC_PATH || '.'}/assets/*`],
+    '@components/*': [`${SRC_PATH || '.'}/components/*`],
+    '@composables/*': [`${SRC_PATH || '.'}/composables/*`],
+    '@layouts/*': [`${SRC_PATH || '.'}/layouts/*`],
+    '@pages/*': [`${SRC_PATH || '.'}/pages/*`],
   }
 
   writeTSConfig(`${ABSOLUTE_ROOT_PATH}/.vulmix/types/tsconfig.json`, tsconfig)
